@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<!-- <context:property-placeholder location="classpath:jdbc.properties"/> -->
+
+  <configuration>
+	<!-- 在此处设置类的别名 -->
+	<properties resource="jdbc.properties"></properties>
+	
+	<typeAliases>
+		<!-- 这样写之后 别名就是类名小写   相当于以下写法-->
+		<!-- <typeAlias type="systemtest.com.hzjs.pojo.User" alias="user"/> -->
+		
+		<package name="com.hzjs.domain"/>
+		<package name="utils"/>
+	</typeAliases>
+	
+	
+	<environments default="development">
+	<!-- 设置默认值 -->
+		<environment id="development">
+		<transactionManager type="JDBC"/>
+			<!-- 配置數據源 -->
+			<dataSource type="utils.mybatis.C3P0DataSourceFactory">
+				<property name="jdbcUrl" value="${c3p0.jdbcUrl}"/>
+				<property name="driverClass" value="${c3p0.driverClass}"/>
+				<property name="user" value="${c3p0.user}"/>
+				<property name="password" value="${c3p0.password}"/>
+
+				<property name="acquireIncrement" value="${c3p0.acquireIncrement}"/>
+				<property name="initialPoolSize" value="${c3p0.initialPoolSize}"/>
+				<property name="minPoolSize" value="${c3p0.minPoolSize}"/>
+				<property name="maxPoolSize" value="${c3p0.maxPoolSize}"/>
+			</dataSource>
+		</environment>
+	</environments>
+	
+	<mappers>
+		<mapper resource="com/hzjs/mapper/TaskInfoMapper.xml"/>
+		<mapper resource="com/hzjs/mapper/TestTypeMapper.xml"/>
+	</mappers>
+
+</configuration>
+

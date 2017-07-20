@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.hzjs.dao.TestTypeMapper">
+	<resultMap type="testType" id="testTypeMap">
+		<result property="ID" column="ID"/>
+		<result property="testTypeName" column="TESTTYPENAME"/>
+	</resultMap>
+	
+	<resultMap type="testCode" id="testCodeMap">
+		<result property="testCode" column="TESTCODE"/>
+		<result property="testName" column="TESTNAME"/>
+	</resultMap>
+
+	<select id="getTestTypes" resultMap="testTypeMap">
+		SELECT ID,TESTTYPENAME FROM S_TESTTYPE
+	</select>
+	
+	<select id="getTestCodeString" parameterType="int" resultType="string">
+		SELECT TESTCODE FROM S_TESTTYPE WHERE ID = #{ID}
+	</select>
+	
+	<select id="findByTestCode" parameterType="string" resultMap="testCodeMap">
+		SELECT TESTCODE,TESTNAME FROM S_TESTCODE WHERE TESTCODE = #{str}
+	</select>
+	
+	<select id="findByTestCode1" parameterType="list" resultMap="testCodeMap">
+		SELECT
+			TESTCODE,TESTNAME 
+		FROM 
+			S_TESTCODE 
+		WHERE 
+			TESTCODE IN 
+		<foreach collection="list" item="codes" open="(" separator="," close=")">
+			#{codes}
+		</foreach>
+		ORDER BY TESTCODE ASC
+	</select>
+	
+	<select id="findByCodeList" parameterType="list" resultMap="testCodeMap">
+		SELECT TESTCODE,TESTNAME FORM S_TESTCODE WHERE TESTCODE IN 
+		<foreach collection="list"></foreach>
+	
+	</select>
+	
+	<select id="getTestCode" parameterType="string" resultType="string">
+		SELECT TESTCODE FROM S_TESTTYPE WHERE TESTTYPENAME = #{testTypeName}
+	</select>
+	
+	<select id="findCodeIntByName" parameterType="string" resultType="int">
+		SELECT TESTCODE FROM S_TESTCODE WHERE TESTNAME = #{testName} 
+	</select>
+	
+
+</mapper>
