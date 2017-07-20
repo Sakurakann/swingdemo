@@ -56,7 +56,7 @@
 
 	<resultMap type="taskQuery" id="taskQueryMap">
 		<result property="taskId" column="TASKID" />
-		<result property="testNum" column="TESTNUM"/>
+		<result property="testNum" column="TESTNUM" />
 		<result property="taskName" column="TASKNAME" />
 		<result property="executeMode" column="EXECUTEMODE" />
 		<result property="cycleValue" column="CYCLEVALUE" />
@@ -97,43 +97,46 @@
 			</if>
 		</where>
 	</select>
-	
+
 	<!-- findTaskInfo 的分页查询 -->
 	<select id="findTaskInfo1" parameterType="queryPOJO" resultMap="taskQueryMap">
 		SELECT
-			TASKID,TASKNAME,EXECUTEMODE,CYCLEINPUT,CYCLEUNIT,TASKSTATUS,PLANTIME
+		TASKID,TASKNAME,EXECUTEMODE,CYCLEINPUT,CYCLEUNIT,TASKSTATUS,PLANTIME
 		FROM (
-			SELECT 
-				ROWNUM RN,A.*
-			FROM(
-				SELECT
-					TASKID,TASKNAME,EXECUTEMODE,CYCLEINPUT,CYCLEUNIT,TASKSTATUS,PLANTIME
-				FROM
-					Z_TASKINFO
-				<where>
-					REMARK1 = 'H'
-					<if test="taskSId != null and taskSId != '' and taskSId != -2 or 0 == taskSId">
-						AND TASKSID = #{taskSId}
-					</if>
-					<if test="testCode != null and testCode != '' and testCode != -1">
-						AND TESTCODE = #{testCode}
-					</if>
-					<if test="taskName != null and taskName != ''">
-						AND TASKNAME LIKE CONCAT(CONCAT('%', #{taskName}),'%')
-					</if>
-				</where>
-			) A WHERE ROWNUM <![CDATA[ <= ]]> #{endRow}
-		) WHERE RN >= #{startRow}
-	</select>
-	
-	<select id="findTaskInfo2" parameterType="queryPOJO" resultType="int">
 		SELECT
-			COUNT(1)
+		ROWNUM RN,A.*
+		FROM(
+		SELECT
+		TASKID,TASKNAME,EXECUTEMODE,CYCLEINPUT,CYCLEUNIT,TASKSTATUS,PLANTIME
 		FROM
-			Z_TASKINFO
+		Z_TASKINFO
 		<where>
 			REMARK1 = 'H'
-			<if test="taskSId != null and taskSId != '' and taskSId != -2 or 0 == taskSId">
+			<if
+				test="taskSId != null and taskSId != '' and taskSId != -2 or 0 == taskSId">
+				AND TASKSID = #{taskSId}
+			</if>
+			<if test="testCode != null and testCode != '' and testCode != -1">
+				AND TESTCODE = #{testCode}
+			</if>
+			<if test="taskName != null and taskName != ''">
+				AND TASKNAME LIKE CONCAT(CONCAT('%', #{taskName}),'%')
+			</if>
+		</where>
+		) A WHERE ROWNUM <![CDATA[ <= ]]>
+		#{endRow}
+		) WHERE RN >= #{startRow}
+	</select>
+
+	<select id="findTaskInfo2" parameterType="queryPOJO" resultType="int">
+		SELECT
+		COUNT(1)
+		FROM
+		Z_TASKINFO
+		<where>
+			REMARK1 = 'H'
+			<if
+				test="taskSId != null and taskSId != '' and taskSId != -2 or 0 == taskSId">
 				AND TASKSID = #{taskSId}
 			</if>
 			<if test="testCode != null and testCode != '' and testCode != -1">
@@ -148,24 +151,24 @@
 	<!-- 查询任务的执行情况 返回总执行次数 成功次数 失败次数 -->
 	<select id="findRate" parameterType="int" resultMap="taskQueryMap">
 		SELECT
-			SUM (DECODE(TRT, 1, 1, 0)) SUCCESSNUM,
-			COUNT(1) TESTNUM,
-			SUM (DECODE(TRT, 0, 1, 0)) FAILURENUM
+		SUM (DECODE(TRT, 1, 1, 0)) SUCCESSNUM,
+		COUNT(1) TESTNUM,
+		SUM (DECODE(TRT, 0, 1, 0)) FAILURENUM
 		FROM(
-			SELECT
-				TESTRESULT TRT
-			FROM
-				Z_TESTRESULT
-			WHERE
-				TASKID = #{taskId})
+		SELECT
+		TESTRESULT TRT
+		FROM
+		Z_TESTRESULT
+		WHERE
+		TASKID = #{taskId})
 	</select>
 
 	<select id="findTaskTestAll" parameterType="taskQuery"
 		resultMap="taskQueryMap">
 		SELECT
-			TASKID,TASKNAME,TESTCOUNT
+		TASKID,TASKNAME,TESTCOUNT
 		FROM
-			Z_TASKINFO
+		Z_TASKINFO
 		<where>
 			TASKSID = #{taskSId}
 			<if test="testCode != null and testCode != '' and testCode != -1">
@@ -176,102 +179,79 @@
 			</if>
 		</where>
 	</select>
-	
+
 	<select id="findTaskTestAll2" parameterType="queryPOJO"
 		resultType="int">
-		
+
 		SELECT
-			count(1)
+		count(1)
 		FROM (
-			SELECT
-				count(1)
-			FROM
-				Z_TESTRESULT ZTT 
-			LEFT JOIN
-				Z_TASKINFO ZTO 
-			ON 
-				ZTO.TASKID = ZTT.TASKID
-			<where>
-				ZTO.TASKSID = #{taskSId}
-				<if test="testCode != null and testCode != '' and testCode != -1">
-					AND ZTO.TESTCODE = #{testCode}
-				</if>
-				<if test="taskName != null and taskName != ''">
-					AND ZTO.TASKNAME LIKE CONCAT(CONCAT('%', #{taskName}),'%')
-				</if>
-			</where>
-			GROUP BY 
-				ZTO.TASKID
-		)
-		<!-- SELECT
-			COUNT(1)
+		SELECT
+		count(1)
 		FROM
-			Z_TASKINFO
+		Z_TESTRESULT ZTT
+		LEFT JOIN
+		Z_TASKINFO ZTO
+		ON
+		ZTO.TASKID = ZTT.TASKID
 		<where>
-			TASKSID = #{taskSId}
+			ZTO.TASKSID = #{taskSId}
 			<if test="testCode != null and testCode != '' and testCode != -1">
-				AND TESTCODE = #{testCode}
+				AND ZTO.TESTCODE = #{testCode}
 			</if>
 			<if test="taskName != null and taskName != ''">
-				AND TASKNAME LIKE CONCAT(CONCAT('%', #{taskName}),'%')
+				AND ZTO.TASKNAME LIKE CONCAT(CONCAT('%', #{taskName}),'%')
 			</if>
-		</where> -->
+		</where>
+		GROUP BY
+		ZTO.TASKID
+		)
+		<!-- SELECT COUNT(1) FROM Z_TASKINFO <where> TASKSID = #{taskSId} <if test="testCode 
+			!= null and testCode != '' and testCode != -1"> AND TESTCODE = #{testCode} 
+			</if> <if test="taskName != null and taskName != ''"> AND TASKNAME LIKE CONCAT(CONCAT('%', 
+			#{taskName}),'%') </if> </where> -->
 	</select>
-	
+
 	<!-- findTaskTestAll的分页查询 -->
-	<select id="findTaskTestAll1" parameterType="queryPOJO" resultMap="taskQueryMap">
+	<select id="findTaskTestAll1" parameterType="queryPOJO"
+		resultMap="taskQueryMap">
 		SELECT
-			*
+		*
 		FROM(
-			SELECT
-				ROWNUM RN,A.*
-			FROM(
-				SELECT
-					ZTO.TASKNAME,
-					ZTO.TASKID,
-					SUM (DECODE(ZTT.TESTRESULT,1,1,0)) SUCCESSNUM,
-					SUM(DECODE(ZTT.TESTRESULT,0,1,0)) FAILURENUM,
-					COUNT(1) TESTNUM
-				FROM
-					Z_TESTRESULT ZTT
-				LEFT JOIN
-					Z_TASKINFO ZTO 
-				ON ZTO.TASKID = ZTT.TASKID
-				<where>
-					ZTO.TASKSID = #{taskSId}
-					<if test="testCode != null and testCode != '' and testCode != -1">
-						AND ZTO.TESTCODE = #{testCode}
-					</if>
-					<if test="taskName != null and taskName != ''">
-						AND ZTO.TASKNAME LIKE CONCAT(CONCAT('%', #{taskName}),'%')
-					</if>
-				</where>
-				GROUP BY 
-					ZTO.TASKID,ZTO.TASKNAME
-			)A 
-			WHERE ROWNUM <![CDATA[ < = ${endRow}]]>
-		) WHERE RN >= ${startRow}
-		<!-- SELECT
-			TASKID,TASKNAME,TESTCOUNT
+		SELECT
+		ROWNUM RN,A.*
+		FROM(
+		SELECT
+		ZTO.TASKNAME,
+		ZTO.TASKID,
+		SUM (DECODE(ZTT.TESTRESULT,1,1,0)) SUCCESSNUM,
+		SUM(DECODE(ZTT.TESTRESULT,0,1,0)) FAILURENUM,
+		COUNT(1) TESTNUM
 		FROM
-			(SELECT
-				ROWNUM RN,A.*
-			FROM
-				(SELECT
-					TASKID,TASKNAME,TESTCOUNT
-					FROM
-						Z_TASKINFO
-					<where>
-						TASKSID = #{taskSId}
-						<if test="testCode != null and testCode != '' and testCode != -1">
-							AND TESTCODE = #{testCode}
-						</if>
-						<if test="taskName != null and taskName != ''">
-							AND TASKNAME LIKE CONCAT(CONCAT('%', #{taskName}),'%')
-						</if>
-					</where>)A
-			WHERE ROWNUM <![CDATA[ <= ]]> #{endRow})
-		WHERE RN >= #{startRow} -->
+		Z_TESTRESULT ZTT
+		LEFT JOIN
+		Z_TASKINFO ZTO
+		ON ZTO.TASKID = ZTT.TASKID
+		<where>
+			ZTO.TASKSID = #{taskSId}
+			<if test="testCode != null and testCode != '' and testCode != -1">
+				AND ZTO.TESTCODE = #{testCode}
+			</if>
+			<if test="taskName != null and taskName != ''">
+				AND ZTO.TASKNAME LIKE CONCAT(CONCAT('%', #{taskName}),'%')
+			</if>
+		</where>
+		GROUP BY
+		ZTO.TASKID,ZTO.TASKNAME
+		)A
+		WHERE ROWNUM <![CDATA[ < = ${endRow}]]>
+		) WHERE RN >= ${startRow}
+		<!-- SELECT TASKID,TASKNAME,TESTCOUNT FROM (SELECT ROWNUM RN,A.* FROM (SELECT 
+			TASKID,TASKNAME,TESTCOUNT FROM Z_TASKINFO <where> TASKSID = #{taskSId} <if 
+			test="testCode != null and testCode != '' and testCode != -1"> AND TESTCODE 
+			= #{testCode} </if> <if test="taskName != null and taskName != ''"> AND TASKNAME 
+			LIKE CONCAT(CONCAT('%', #{taskName}),'%') </if> </where>)A WHERE ROWNUM <![CDATA[ 
+			<= ]]> #{endRow}) WHERE RN >= #{startRow} -->
 	</select>
 
 	<!-- 查询上一次插入的 任务组tasksid -->
@@ -279,7 +259,7 @@
 		<!-- SELECT SEQ_Z_TASKINFO_TASKSID.nextVal-1 FROM DUAL -->
 		SELECT SEQ_Z_TASKINFO_TASKSID.currVal FROM DUAL
 	</select>
-	
+
 	<!-- 返回类型为集合中的元素 而不是集合本身 -->
 	<select id="findTaskIdBySId" parameterType="int" resultType="integer">
 		SELECT TASKID FROM Z_TASKINFO WHERE TASKSID = #{taskSId}
@@ -291,64 +271,94 @@
 			SELECT SEQ_Z_TASKINFO_TASKSID.nextVal FROM DUAL
 		</selectKey>
 		INSERT INTO Z_TASKINFO (
-			TASKID,
-			TASKSID,
-			TASKNAME,
-			TESTCODE,
-			EXECUTEMODE,
-			EXECUTENUM,
-			CYCLEINPUT,
-			CYCLEUNIT,
-			CYCLEVALUE,
-			PLANTIME,
-			CALLER,
-			CALLED,
-			ROUTER,
-			TEXTINFO,
-			GATEWAY,
-			TONECODE1,
-			TONECODE3,
-			TONENAME1,
-			DURATION,
-			INTERVAL,
-			REMARK1
+		TASKID,
+		TASKSID,
+		TASKNAME,
+		TESTCODE,
+		EXECUTEMODE,
+		EXECUTENUM,
+		CYCLEINPUT,
+		CYCLEUNIT,
+		CYCLEVALUE,
+		PLANTIME,
+		CALLER,
+		CALLED,
+		ROUTER,
+		TEXTINFO,
+		GATEWAY,
+		TONECODE1,
+		TONECODE3,
+		TONENAME1,
+		DURATION,
+		INTERVAL,
+		REMARK1
 		)
 		SELECT
-			SEQ_Z_TASKINFO_TASKID.nextVal, A.* FROM (
+		SEQ_Z_TASKINFO_TASKID.nextVal, A.* FROM (
 		<foreach collection="list" index="index" item="task"
 			separator="UNION" open="(" close=")">
 			SELECT
-				#{taskSId},
-				#{task.taskName},
-				#{task.testCode},
-				#{task.executeMode},
-				#{task.executeNum},
-				#{task.cycleInput},
-				#{task.cycleUnit},
-				#{task.cycleValue},
-				#{task.planTime},
-				#{task.caller},
-				#{task.called},
-				#{task.router},
-				#{task.textInfo},
-				#{task.gateWay},
-				#{task.toneCode1},
-				#{task.toneCode3},
-				#{task.toneName1},
-				#{task.duration},
-				#{task.interVal},
-				#{task.remark1}
+			#{taskSId},
+			#{task.taskName},
+			#{task.testCode},
+			#{task.executeMode},
+			#{task.executeNum},
+			#{task.cycleInput},
+			#{task.cycleUnit},
+			#{task.cycleValue},
+			#{task.planTime},
+			#{task.caller},
+			#{task.called},
+			#{task.router},
+			#{task.textInfo},
+			#{task.gateWay},
+			#{task.toneCode1},
+			#{task.toneCode3},
+			#{task.toneName1},
+			#{task.duration},
+			#{task.interVal},
+			#{task.remark1}
 			FROM DUAL
 		</foreach>
 		)A
 	</insert>
 
 	<select id="getTemplate" resultMap="taskInfoMap">
-		SELECT 
-			TASKNAME,TESTCODE,CALLER,CALLED,ROUTER,TEXTINFO,GATEWAY,TONECODE1,TONECODE3,TONENAME1
-		FROM 
-			Z_TASKINFO
-		WHERE 
-			EXECUTEMODE=3 AND SENDSTATUS=1 AND TASKSTATUS=1
+		SELECT
+		TASKNAME,TESTCODE,CALLER,CALLED,ROUTER,TEXTINFO,GATEWAY,TONECODE1,TONECODE3,TONENAME1
+		FROM
+		Z_TASKINFO
+		WHERE
+		EXECUTEMODE=3 AND SENDSTATUS=1 AND TASKSTATUS=1 ORDER BY SYS_GUID()
 	</select>
+
+	<select id="getTemplateTestCode" resultType="integer">
+		select 
+			t.testcode
+		from 
+			z_testresult z,z_taskinfo t 
+		where 
+			z.taskid=t.taskid and
+			t.executemode=3 and t.taskstatus=1 and t.sendstatus=1 and
+			starttime>trunc(sysdate) 
+		group by t.testcode
+	</select>
+	<select id="getTemplateOrderBy" parameterType="list" resultMap="taskInfoMap">
+		<foreach collection="list" item="testCode" separator="union">
+		
+		select * from(
+			select 
+				o.TASKNAME,o.TESTCODE,o.CALLER,o.CALLED,o.ROUTER,o.TEXTINFO,o.GATEWAY,o.TONECODE1,o.TONECODE3,o.TONENAME1
+			from 
+				z_taskinfo o,z_testresult t
+			where 
+				o.taskid=t.taskid
+				and o.executemode=3 and o.taskstatus=1 and o.sendstatus=1 and
+			    t.starttime>trunc(sysdate) and o.testcode = #{testCode} 
+			order by SYS_GUID()
+		) where rownum <![CDATA[ < ]]> 2
+		</foreach>
+	</select>
+	
+	
 </mapper>

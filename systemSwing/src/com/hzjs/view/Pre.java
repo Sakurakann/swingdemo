@@ -22,12 +22,13 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.filechooser.FileFilter;
 
-import com.hzjs.dao.impl.TaskInfoDao;
-import com.hzjs.domain.TaskInfo;
-
 import utils.excel.ExcelExportUtil;
 import utils.prop.EditProp;
 import utils.prop.JDBCConn;
+import utils.xml.XMLUtil;
+
+import com.hzjs.dao.impl.TaskInfoDao;
+import com.hzjs.domain.TaskInfo;
 
 public class Pre extends JFrame {
 	private static final long serialVersionUID = 1L;
@@ -41,7 +42,9 @@ public class Pre extends JFrame {
 	private JButton editProrBtn;
 	private JButton taskSimulationBtn;
 	private JButton exportBtn;
-	
+	private JButton RMIModifyBtn;
+	private JButton RMIDefaultBtn;
+	// TODO
 	private TaskInfoDao taskInfoDao = new TaskInfoDao();
 
 	private String IPPattern = "(25[0-5]|2[0-4]\\d|[0-1]\\d{2}|[1-9]?\\d)\\."
@@ -50,6 +53,8 @@ public class Pre extends JFrame {
 			+ "(25[0-5]|2[0-4]\\d|[0-1]\\d{2}|[1-9]?\\d)";
 	private String SIDPattern = "[a-zA-z_\\-0-9]+";
 	private String passWordPattern = "^([A-Z]|[a-z]|[0-9]|[`~!@#$%^&*()+=|{}':;',\\\\[\\\\].<>/?]){1,20}$";
+	private JTextField RMIIPField;
+	private JTextField RMIPortField;
 
 	/**
 	 * Launch the application.
@@ -74,7 +79,7 @@ public class Pre extends JFrame {
 		setResizable(false);
 		setTitle("系统检测");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 695, 358);
+		setBounds(100, 100, 695, 465);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		// 设置绝对坐标
@@ -89,11 +94,11 @@ public class Pre extends JFrame {
 		panel.setLayout(null);
 
 		JLabel lblIp = new JLabel("IP");
-		lblIp.setBounds(40, 32, 12, 15);
+		lblIp.setBounds(62, 32, 12, 15);
 		panel.add(lblIp);
 
 		JLabel label = new JLabel("端口");
-		label.setBounds(229, 32, 31, 15);
+		label.setBounds(265, 32, 31, 15);
 		panel.add(label);
 
 		JLabel label_1 = new JLabel("服务名");
@@ -101,29 +106,29 @@ public class Pre extends JFrame {
 		panel.add(label_1);
 
 		JLabel label_2 = new JLabel("登录名");
-		label_2.setBounds(78, 82, 41, 15);
+		label_2.setBounds(40, 79, 41, 15);
 		panel.add(label_2);
 
 		JLabel label_3 = new JLabel("登录密码");
-		label_3.setBounds(348, 82, 55, 15);
+		label_3.setBounds(241, 79, 55, 15);
 		panel.add(label_3);
 
 		passwordField = new JPasswordField();
-		passwordField.setBounds(402, 79, 120, 21);
+		passwordField.setBounds(296, 76, 120, 21);
 		panel.add(passwordField);
 
 		userNameField = new JTextField();
-		userNameField.setBounds(120, 79, 120, 21);
+		userNameField.setBounds(82, 76, 120, 21);
 		panel.add(userNameField);
 		userNameField.setColumns(10);
 
 		IPField = new JTextField();
-		IPField.setBounds(58, 29, 93, 21);
+		IPField.setBounds(82, 29, 93, 21);
 		panel.add(IPField);
 		IPField.setColumns(10);
 
 		portField = new JTextField();
-		portField.setBounds(259, 29, 72, 21);
+		portField.setBounds(295, 29, 72, 21);
 		panel.add(portField);
 		portField.setColumns(10);
 
@@ -131,13 +136,12 @@ public class Pre extends JFrame {
 		SIDField.setBounds(471, 29, 83, 21);
 		panel.add(SIDField);
 		SIDField.setColumns(10);
-		
 
 		JButton defaultPropBtn = new JButton("默认配置");
 		defaultPropBtn.setBounds(85, 141, 93, 23);
 		panel.add(defaultPropBtn);
 		defaultPropBtn.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
@@ -146,12 +150,12 @@ public class Pre extends JFrame {
 						exportBtn.setEnabled(true);
 					}
 				} catch (Exception e2) {
-					JOptionPane.showMessageDialog(contentPane, "默认数据库连接错误,请重新配置");
+					JOptionPane.showMessageDialog(contentPane,
+							"默认数据库连接错误,请重新配置");
 					return;
 				}
 			}
 		});
-		
 
 		JButton editTestBtn = new JButton("测试连接");
 		editTestBtn.addActionListener(new ActionListener() {
@@ -265,18 +269,18 @@ public class Pre extends JFrame {
 			}
 		});
 
-		taskSimulationBtn = new JButton("模拟测试");
+		taskSimulationBtn = new JButton("导入模板");
 		taskSimulationBtn.setEnabled(false);
 		taskSimulationBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				goToTaskSimulation(e);
 			}
 		});
-		taskSimulationBtn.setBounds(483, 249, 93, 23);
+		taskSimulationBtn.setBounds(483, 385, 93, 23);
 		contentPane.add(taskSimulationBtn);
 
 		exportBtn = new JButton("检出模板");
-		exportBtn.setBounds(113, 249, 93, 23);
+		exportBtn.setBounds(113, 385, 93, 23);
 		contentPane.add(exportBtn);
 		exportBtn.setEnabled(false);
 		exportBtn.addActionListener(new ActionListener() {
@@ -348,6 +352,77 @@ public class Pre extends JFrame {
 				}
 			}
 		});
+		// TODO
+		JPanel panel_1 = new JPanel();
+		panel_1.setBorder(new TitledBorder(null, "RMI配置", TitledBorder.LEADING,
+				TitledBorder.TOP, null, null));
+		panel_1.setBounds(29, 227, 624, 127);
+		contentPane.add(panel_1);
+		panel_1.setLayout(null);
+
+		JLabel lblIp_1 = new JLabel("IP");
+		lblIp_1.setBounds(120, 23, 17, 15);
+		panel_1.add(lblIp_1);
+
+		RMIIPField = new JTextField();
+		RMIIPField.setBounds(137, 20, 76, 21);
+		panel_1.add(RMIIPField);
+		RMIIPField.setColumns(10);
+
+		JLabel label_4 = new JLabel("端口");
+		label_4.setBounds(364, 23, 37, 15);
+		panel_1.add(label_4);
+
+		RMIPortField = new JTextField();
+		RMIPortField.setBounds(397, 20, 66, 21);
+		panel_1.add(RMIPortField);
+		RMIPortField.setColumns(10);
+
+		RMIDefaultBtn = new JButton("默认配置");
+		RMIDefaultBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					XMLUtil.RMIConn();
+					JOptionPane.showMessageDialog(null, "RMI 配置可用");
+				} catch (Throwable e2) {
+					JOptionPane.showMessageDialog(null, "RMI 配置错误");
+					return;
+				}
+				
+			}
+		});
+		RMIDefaultBtn.setBounds(120, 66, 93, 23);
+		panel_1.add(RMIDefaultBtn);
+
+		RMIModifyBtn = new JButton("更新配置");
+		RMIModifyBtn.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String rmiIP = RMIIPField.getText();
+				if (!Pattern.matches(IPPattern, rmiIP)) {
+					JOptionPane.showMessageDialog(null, "RMI IP输入错误");
+					return;
+				}
+				String rmiPort = RMIPortField.getText();
+				if (!Pattern.matches("[1-6]{0,1}[0-9]{1,4}", rmiPort)) {
+					JOptionPane.showMessageDialog(null, "RMI 端口输入错误");
+					return;
+				}
+				try {
+					XMLUtil.ModifyRMIUrl(rmiIP, rmiPort);
+					JOptionPane.showMessageDialog(null, "RMI配置更新成功");
+				} catch (Exception e2) {
+					JOptionPane.showMessageDialog(null, "RMI配置更新错误");
+					return;
+					// TODO: handle exception
+				}
+			}
+		});
+		RMIModifyBtn.setBounds(370, 66, 93, 23);
+		panel_1.add(RMIModifyBtn);
 
 		// 设置窗口居中
 		int windowWidth = this.getWidth(); // 获得窗口宽
@@ -358,11 +433,11 @@ public class Pre extends JFrame {
 		int screenHeight = screenSize.height; // 获取屏幕的高
 		this.setLocation(screenWidth / 2 - windowWidth / 2, screenHeight / 2
 				- windowHeight / 2);// 设置窗口居中显示
-		
+
 	}
-	
-	//跳转到模拟测试页面
-	private void goToTaskSimulation(ActionEvent e){
+
+	// 跳转到模拟测试页面
+	private void goToTaskSimulation(ActionEvent e) {
 		this.dispose();
 		TaskSimulationTest.main(null);
 	}

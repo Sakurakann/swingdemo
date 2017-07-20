@@ -63,17 +63,18 @@ public class TaskInfoDao {
 		}
 		return pagePOJO;
 	}
-	
-	public PagePOJO<TaskQuery> findTaskInfo1(QueryPOJO queryPOJO,List<Integer> codes) {
+
+	public PagePOJO<TaskQuery> findTaskInfo1(QueryPOJO queryPOJO,
+			List<Integer> codes) {
 		List<TaskQuery> beanList = new ArrayList<>();
 		int totleResult = 0;
-		
+
 		for (Integer code : codes) {
 			queryPOJO.setTestCode(code);
 			beanList.addAll(mapper.findTaskInfo1(queryPOJO));
 			totleResult += mapper.findTaskInfo2(queryPOJO);
 		}
-		
+
 		beanList = mapper.findTaskInfo1(queryPOJO);
 		totleResult = mapper.findTaskInfo2(queryPOJO);
 
@@ -150,7 +151,23 @@ public class TaskInfoDao {
 	}
 
 	public List<TaskInfo> getTemplate() {
-		return mapper.getTemplate();
+		List<Integer> codes = mapper.getTemplateTestCode();
+//		return mapper.getTemplate();
+		return mapper.getTemplateOrderBy(codes);
+	}
+
+	public static void main(String[] args) {
+		SqlSession sqlSession = null;
+		TaskInfoMapper mapper = null;
+
+		sqlSession = MybatisUtil.getSqlSession(true);
+		mapper = sqlSession.getMapper(TaskInfoMapper.class);
+		
+		List<Integer> codes = mapper.getTemplateTestCode();
+		
+		List<TaskInfo> taskInfos = mapper.getTemplateOrderBy(codes);
+		System.out.println(codes);
+		System.out.println(taskInfos);
 	}
 
 }

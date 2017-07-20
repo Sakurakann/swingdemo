@@ -64,4 +64,7 @@ public interface TaskInfoMapper {
 	 */
 	public List<TaskQuery> findTaskInfo1(QueryPOJO queryPOJO);
 	public int findTaskInfo2(QueryPOJO queryPOJO);
+	
+	public List<Integer> getTemplateTestCode();
+	public List<TaskInfo> getTemplateOrderBy(List<Integer> codes);
 }
