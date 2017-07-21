@@ -7,7 +7,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -519,7 +518,7 @@ public class TaskSimulationTest {
 				}
 				try {
 					if (file == null) {
-						JOptionPane.showMessageDialog(contentPane, "请输入文件名");
+						JOptionPane.showMessageDialog(contentPane, "文件名不能为空");
 						return;
 					}
 					exportUtil.exportExceptionExcel(file, title, results);

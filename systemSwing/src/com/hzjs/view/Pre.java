@@ -338,7 +338,7 @@ public class Pre extends JFrame {
 				}
 				try {
 					if (file == null) {
-						JOptionPane.showMessageDialog(contentPane, "请输入文件名");
+						JOptionPane.showMessageDialog(contentPane, "文件名不能为空");
 						return;
 					}
 					exportUtil.exportExceptionExcel(file, title, results);
