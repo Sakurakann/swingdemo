@@ -1,21 +1,8 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-    <application
-            monitor="3"
-            scheduler="3"
-            executor="10"
-            modules="server,handler"/>
+    <application monitor="3" scheduler="3" executor="10" modules="server,handler"/>
     <modules>
-        <module
-                name="server"
-                type="server"
-                module="com.jeesoon.tnits.server.ServerProxy"
-                url="rmi://127.0.0.1:20061/server"
-                depends=""/>
-        <module
-                name="handler"
-                type="handler"
-                module="com.gs.biz.BizAsyncRouter"
-                route="server"/>
+        <module name="server" type="server" module="com.jeesoon.tnits.server.ServerProxy" url="rmi://210.32.1.196:20061/server" depends=""/>
+        <module name="handler" type="handler" module="com.gs.biz.BizAsyncRouter" route="server"/>
     </modules>
 </configuration>

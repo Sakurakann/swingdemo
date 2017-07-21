@@ -52,6 +52,10 @@ public class XMLUtil {
 			}
 			XMLWriter writer = new XMLWriter(fos);
 			writer.write(doc);
+			
+			fos.flush();
+			fos.close();
+			writer.close();
 		} catch (DocumentException | FileNotFoundException e) {
 			System.out.println("文件不存在");
 			e.printStackTrace();
