@@ -417,7 +417,6 @@ public class Pre extends JFrame {
 				} catch (Exception e2) {
 					JOptionPane.showMessageDialog(null, "RMI配置更新错误");
 					return;
-					// TODO: handle exception
 				}
 			}
 		});
