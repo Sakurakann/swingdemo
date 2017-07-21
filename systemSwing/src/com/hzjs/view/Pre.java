@@ -385,7 +385,7 @@ public class Pre extends JFrame {
 				try {
 					XMLUtil.RMIConn();
 					JOptionPane.showMessageDialog(null, "RMI 配置可用");
-				} catch (Throwable e2) {
+				} catch (Exception e2) {
 					JOptionPane.showMessageDialog(null, "RMI 配置错误");
 					return;
 				}

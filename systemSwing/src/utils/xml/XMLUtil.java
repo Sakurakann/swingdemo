@@ -23,7 +23,7 @@ public class XMLUtil {
 	public XMLUtil() {
 	}
 
-	public static void RMIConn() throws Throwable{
+	public static void RMIConn() throws Exception{
 
 		new BizApplication("server.properties.xml").run();
 		WebClient.login("test", "test");
