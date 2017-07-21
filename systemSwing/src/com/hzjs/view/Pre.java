@@ -6,7 +6,6 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -345,7 +344,7 @@ public class Pre extends JFrame {
 					exportUtil.exportExceptionExcel(file, title, results);
 					JOptionPane.showMessageDialog(null, "导出成功");
 					return;
-				} catch (FileNotFoundException e1) {
+				} catch (Exception e1) {
 					JOptionPane.showMessageDialog(null, "导出失败");
 					e1.printStackTrace();
 					return;
