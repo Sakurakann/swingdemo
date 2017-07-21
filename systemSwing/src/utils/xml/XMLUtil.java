@@ -25,12 +25,7 @@ public class XMLUtil {
 
 	public static void RMIConn() throws Exception{
 
-		try {
-			new BizApplication("server.properties.xml").run();
-			
-		} catch (Exception e) {
-			
-		}
+		new BizApplication("server.properties.xml").run();			
 		WebClient.login("test", "test");
 
 	}
