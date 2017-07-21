@@ -29,7 +29,7 @@ public class XMLUtil {
 			new BizApplication("server.properties.xml").run();
 			
 		} catch (Exception e) {
-			throw new Exception("chucuo");
+			
 		}
 		WebClient.login("test", "test");
 
