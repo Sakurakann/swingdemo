@@ -61,7 +61,7 @@ public class ExcelImportUtil {
 				int firstCellNum = row.getFirstCellNum();
 				int lastCellNum = row.getLastCellNum();
 				//编历所有的列
-				List<Object> list2 = new ArrayList<>();
+				List<Object> list2 = new ArrayList<Object>();
 				for (int k = firstCellNum; k <= lastCellNum; k++) {
 					cell = row.getCell(k);
 					if (null == cell) {

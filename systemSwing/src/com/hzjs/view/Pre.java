@@ -291,7 +291,7 @@ public class Pre extends JFrame {
 				if (results.size() <= 0) {
 					JOptionPane.showMessageDialog(contentPane, "模板为空,仍然导出?");
 				}
-				ExcelExportUtil<TaskInfo> exportUtil = new ExcelExportUtil<>();
+				ExcelExportUtil<TaskInfo> exportUtil = new ExcelExportUtil<TaskInfo>();
 				String[] title = new String[] { "taskName", "testCode",
 						"caller", "called", "router", "textInfo", "gateWay",
 						"toneCode1", "toneCode3", "toneName1" };

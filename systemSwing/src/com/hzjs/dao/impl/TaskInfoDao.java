@@ -52,7 +52,7 @@ public class TaskInfoDao {
 		List<TaskQuery> beanList = mapper.findTaskInfo1(queryPOJO);
 		int totleResult = mapper.findTaskInfo2(queryPOJO);
 
-		PagePOJO<TaskQuery> pagePOJO = new PagePOJO<>();
+		PagePOJO<TaskQuery> pagePOJO = new PagePOJO<TaskQuery>();
 
 		pagePOJO.setBeanList(beanList);
 		pagePOJO.setTotleResult(totleResult);
@@ -66,7 +66,7 @@ public class TaskInfoDao {
 
 	public PagePOJO<TaskQuery> findTaskInfo1(QueryPOJO queryPOJO,
 			List<Integer> codes) {
-		List<TaskQuery> beanList = new ArrayList<>();
+		List<TaskQuery> beanList = new ArrayList<TaskQuery>();
 		int totleResult = 0;
 
 		for (Integer code : codes) {
@@ -78,7 +78,7 @@ public class TaskInfoDao {
 		beanList = mapper.findTaskInfo1(queryPOJO);
 		totleResult = mapper.findTaskInfo2(queryPOJO);
 
-		PagePOJO<TaskQuery> pagePOJO = new PagePOJO<>();
+		PagePOJO<TaskQuery> pagePOJO = new PagePOJO<TaskQuery>();
 
 		pagePOJO.setBeanList(beanList);
 		pagePOJO.setTotleResult(totleResult);
@@ -100,7 +100,7 @@ public class TaskInfoDao {
 	 */
 	private List<TaskInfo> putListObjToTaskInfos(List<List<Object>> listobj,
 			TaskQuery taskQuery) throws Exception {
-		List<TaskInfo> taskInfos = new ArrayList<>();
+		List<TaskInfo> taskInfos = new ArrayList<TaskInfo>();
 		for (int i = 1; i < listobj.size(); i++) {
 			TaskInfo info = new TaskInfo();
 

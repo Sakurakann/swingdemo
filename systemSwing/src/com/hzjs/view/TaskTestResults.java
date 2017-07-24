@@ -46,7 +46,7 @@ public class TaskTestResults extends JFrame {
 	private JTable resultTable;
 	private JTextField taskSIdField;
 	private JFormattedTextField taskName;
-	private JComboBox<Object> testCode;
+	private JComboBox testCode;
 	private JButton nextPage;
 	private JButton previousPage;
 	private JLabel foot;
@@ -64,10 +64,10 @@ public class TaskTestResults extends JFrame {
 	private List<TaskQuery> results;
 	private List<TestType> testTypes;
 	private List<Integer> codes;
-	private PagePOJO<TaskQuery> pagePOJO = new PagePOJO<>();
+	private PagePOJO<TaskQuery> pagePOJO = new PagePOJO<TaskQuery>();
 
 	private DefaultTableModel tableModel = new DefaultTableModel();
-	private DefaultComboBoxModel<Object> codeModel = new DefaultComboBoxModel<>();
+	private DefaultComboBoxModel codeModel = new DefaultComboBoxModel();
 	private String[] tableTitle = new String[] { "\u4EFB\u52A1ID",
 			"\u4EFB\u52A1\u540D\u79F0", "\u6210\u529F\u6B21\u6570",
 			"\u6210\u529F\u7387", "\u5931\u8D25\u6B21\u6570",
@@ -137,19 +137,19 @@ public class TaskTestResults extends JFrame {
 		label_1.setBounds(10, 39, 55, 23);
 		contentPane.add(label_1);
 
-		Vector<Object> testTypeVector = new Vector<>();
+		Vector<Object> testTypeVector = new Vector<Object>();
 		testTypeVector.addElement("---请选择测试类别---");
 		for (TestType Type : testTypes) {
 			testTypeVector.addElement(Type.getTestTypeName());
 		}
-		JComboBox<Object> testType = new JComboBox<>(testTypeVector);
+		JComboBox testType = new JComboBox(testTypeVector);
 		testType.setBounds(68, 39, 195, 23);
 		testType.setFont(font);
 		testType.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JComboBox<?> thisType = (JComboBox<?>) e.getSource();
+				JComboBox thisType = (JComboBox) e.getSource();
 				String testTypeName = (String) thisType.getSelectedItem();
 				if (testTypeName.contains("---请选择测试类别---")) {
 					codeModel.removeAllElements();
@@ -174,7 +174,7 @@ public class TaskTestResults extends JFrame {
 		contentPane.add(label_2);
 
 		// 使用模型创建选择
-		testCode = new JComboBox<Object>(codeModel);
+		testCode = new JComboBox(codeModel);
 		testCode.setBounds(336, 39, 156, 23);
 		testCode.setFont(font);
 		contentPane.add(testCode);
@@ -264,7 +264,7 @@ public class TaskTestResults extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				ExcelExportUtil<TaskQuery> exportUtil = new ExcelExportUtil<>();
+				ExcelExportUtil<TaskQuery> exportUtil = new ExcelExportUtil<TaskQuery>();
 				String[] title = new String[] { "taskId", "taskName",
 						"successNum", "successRate", "failureNum",
 						"failureRate" };
@@ -387,7 +387,7 @@ public class TaskTestResults extends JFrame {
 	 */
 
 	@SuppressWarnings("unused")
-	private DefaultComboBoxModel<Object> getInitCodeModel(
+	private DefaultComboBoxModel getInitCodeModel(
 			List<TestType> testTypes) {
 		TestType type = testTypes.get(0);
 		List<Integer> codes = testTypeDao.findTestCodeByName(type
@@ -480,9 +480,9 @@ public class TaskTestResults extends JFrame {
 
 		results = pagePOJO.getBeanList();
 
-		Vector<Vector<Object>> data = new Vector<>();
+		Vector<Vector<Object>> data = new Vector<Vector<Object>>();
 		for (TaskQuery task : results) {
-			Vector<Object> rowVector = new Vector<>();
+			Vector<Object> rowVector = new Vector<Object>();
 			DecimalFormat df = new DecimalFormat("0%");
 
 			rowVector.addElement(task.getTaskId());
@@ -494,7 +494,7 @@ public class TaskTestResults extends JFrame {
 
 			data.add(rowVector);
 		}
-		Vector<String> columnName = new Vector<>();
+		Vector<String> columnName = new Vector<String>();
 		for (String str : tableTitle) {
 			columnName.addElement(str);
 		}

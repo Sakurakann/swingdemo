@@ -56,7 +56,7 @@ public class XMLUtil {
 			fos.flush();
 			fos.close();
 			writer.close();
-		} catch (DocumentException | FileNotFoundException e) {
+		} catch (DocumentException e) {
 			System.out.println("文件不存在");
 			e.printStackTrace();
 		} catch (UnsupportedEncodingException e) {

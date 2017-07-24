@@ -40,7 +40,7 @@ public class TestResultDao {
 		List<TaskQuery> beanList = mapper.findTaskTestAll1(queryPOJO);
 		int totleResult = mapper.findTaskTestAll2(queryPOJO);
 
-		PagePOJO<TaskQuery> pagePOJO = new PagePOJO<>();
+		PagePOJO<TaskQuery> pagePOJO = new PagePOJO<TaskQuery>();
 		pagePOJO.setBeanList(beanList);
 
 		if (totleResult != 0) {
@@ -57,14 +57,14 @@ public class TestResultDao {
 
 		
 		int totleResult = 0;
-		List<TaskQuery> beanList = new ArrayList<>();
+		List<TaskQuery> beanList = new ArrayList<TaskQuery>();
 		for (Integer code : codes) {
 			queryPOJO.setTestCode(code);
 			beanList.addAll(mapper.findTaskTestAll1(queryPOJO));
 			totleResult += mapper.findTaskTestAll2(queryPOJO);
 		}
 
-		PagePOJO<TaskQuery> pagePOJO = new PagePOJO<>();
+		PagePOJO<TaskQuery> pagePOJO = new PagePOJO<TaskQuery>();
 		pagePOJO.setBeanList(beanList);
 
 		if (totleResult != 0) {

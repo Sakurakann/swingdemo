@@ -51,7 +51,7 @@ public class TestTypeDao {
 	 */
 	public List<Integer> findTestCodeByName(String testTypeName) {
 		String str = mapper.getTestCode(testTypeName);
-		List<Integer> list = new ArrayList<>();
+		List<Integer> list = new ArrayList<Integer>();
 		String[] strArr = str.split(",");
 		if (strArr == null) {
 			list.add(-1);

@@ -60,7 +60,7 @@ public class TaskSimulationTest {
 	private JTable resultTable;
 	private JButton taskTestResult;
 	private JLabel foot;
-	private JComboBox<Object> testCode;
+	private JComboBox testCode;
 	private JFormattedTextField taskname;
 	private JButton previousPage;
 	private JButton nextPage;
@@ -71,7 +71,7 @@ public class TaskSimulationTest {
 	private TestTypeDao testTypeDao = new TestTypeDao();
 	private List<List<Object>> listobj = null;
 	private List<TestType> testTypes = null;
-	private PagePOJO<TaskQuery> pagePOJO = new PagePOJO<>();
+	private PagePOJO<TaskQuery> pagePOJO = new PagePOJO<TaskQuery>();
 	private JTextField goTOPageField;
 	private JTextField pageSizeField;
 
@@ -81,9 +81,9 @@ public class TaskSimulationTest {
 	private int currPage;
 	private List<Integer> codes;
 
-	private DefaultComboBoxModel<Object> model = new DefaultComboBoxModel<>();
+	private DefaultComboBoxModel model = new DefaultComboBoxModel();
 	private DefaultTableModel tableModel = new MyTableModel();
-	private Vector<String> columnName = new Vector<>();
+	private Vector<String> columnName = new Vector<String>();
 	protected final String[] title = new String[] { "\u4efb\u52a1ID",
 			"\u4efb\u52a1\u540d\u79f0", "\u6267\u884c\u65b9\u5f0f",
 			"\u5faa\u73af\u5468\u671f", "\u6267\u884c\u72b6\u6001",
@@ -221,9 +221,9 @@ public class TaskSimulationTest {
 		panel.add(btnNewButton);
 
 		// 执行方式
-		final JComboBox<Object> executeMode = new JComboBox<>();
+		final JComboBox executeMode = new JComboBox();
 		executeMode.setFont(new Font("宋体", Font.PLAIN, 13));
-		executeMode.setModel(new DefaultComboBoxModel<Object>(new String[] {
+		executeMode.setModel(new DefaultComboBoxModel(new String[] {
 				"定时", "循环", "立即" }));
 		executeMode.addActionListener(new ActionListener() {
 
@@ -256,9 +256,9 @@ public class TaskSimulationTest {
 		datePicker.setBounds(618, 28, 200, 23);
 		panel.add(datePicker);
 
-		final JComboBox<Object> cycleUnit = new JComboBox<>();
+		final JComboBox cycleUnit = new JComboBox();
 		cycleUnit.setFont(new Font("宋体", Font.PLAIN, 13));
-		cycleUnit.setModel(new DefaultComboBoxModel<Object>(new String[] {
+		cycleUnit.setModel(new DefaultComboBoxModel(new String[] {
 				"不循环", "分钟", "小时", "天", "周", "月" }));
 		cycleUnit.setBounds(456, 27, 67, 23);
 		panel.add(cycleUnit);
@@ -290,7 +290,17 @@ public class TaskSimulationTest {
 				String executeModeStr = (String) executeMode.getSelectedItem();
 				String cycleUnitStr = (String) cycleUnit.getSelectedItem();
 
-				switch (executeModeStr) {
+				//TODO 修改成if 1.6
+				if (executeModeStr.equals("立即")) {
+					executeModeChar = '1';
+				} else if (executeModeStr.equals("定时")) {
+					executeModeChar = '2';
+				} else if (executeModeStr.equals("循环")) {
+					executeModeChar = '3';
+				}
+				
+				// 1.7+
+				/*switch (executeModeStr) {
 				case "立即":
 					executeModeChar = '1';
 					break;
@@ -302,8 +312,24 @@ public class TaskSimulationTest {
 					break;
 				default:
 					break;
-				}
-				switch (cycleUnitStr) {
+				}*/
+				
+				if (cycleUnitStr.equals("不循环")) {
+					cycleUnitVal = 0;
+				} else if (cycleUnitStr.equals("分钟")) {
+					cycleUnitVal = 1;
+				} else if (cycleUnitStr.equals("小时")) {
+					cycleUnitVal = 2;
+				} else if (cycleUnitStr.equals("天")) {
+					cycleUnitVal = 3;
+				} else if (cycleUnitStr.equals("周")) {
+					cycleUnitVal = 4;
+				} else if (cycleUnitStr.equals("月")) {
+					cycleUnitVal = 5;
+				} 
+				
+				
+				/*switch (cycleUnitStr) {
 				case "不循环":
 					cycleUnitVal = 0;
 					break;
@@ -324,7 +350,7 @@ public class TaskSimulationTest {
 					break;
 				default:
 					break;
-				}
+				}*/
 
 				// 当执行方式为循环时 可以没有执行次数
 				// 循环
@@ -471,7 +497,7 @@ public class TaskSimulationTest {
 				if (results.size() <= 0) {
 					JOptionPane.showMessageDialog(contentPane, "模板为空,仍然导出?");
 				}
-				ExcelExportUtil<TaskInfo> exportUtil = new ExcelExportUtil<>();
+				ExcelExportUtil<TaskInfo> exportUtil = new ExcelExportUtil<TaskInfo>();
 				String[] title = new String[] { "taskName", "testCode",
 						"caller", "called", "router", "textInfo", "gateWay",
 						"toneCode1", "toneCode3", "toneName1" };
@@ -570,12 +596,12 @@ public class TaskSimulationTest {
 		/**
 		 * 测试类别选择
 		 */
-		Vector<Object> vector = new Vector<>();
+		Vector<Object> vector = new Vector<Object>();
 		vector.addElement("---请选择测试类别---");
 		for (TestType type : testTypes) {
 			vector.add(type.getTestTypeName());
 		}
-		final JComboBox<Object> testType = new JComboBox<Object>(vector);
+		final JComboBox testType = new JComboBox(vector);
 		testType.addActionListener(new ActionListener() {
 
 			@Override
@@ -619,7 +645,7 @@ public class TaskSimulationTest {
 		/**
 		 * 测试类型选择 二级联动根据测试类别变化
 		 */
-		testCode = new JComboBox<Object>(model);
+		testCode = new JComboBox(model);
 		testCode.setBounds(333, 28, 141, 23);
 		panel_1.add(testCode);
 		testCode.setFont(new Font("宋体", Font.PLAIN, 13));
@@ -769,7 +795,7 @@ public class TaskSimulationTest {
 	 * @param testTypes
 	 * @return
 	 */
-	private DefaultComboBoxModel<Object> getInitCodeModel(
+	private DefaultComboBoxModel getInitCodeModel(
 			List<TestType> testTypes) {
 		TestType type = testTypes.get(0);
 		List<Integer> codes = testTypeDao.findTestCodeByName(type
@@ -886,13 +912,13 @@ public class TaskSimulationTest {
 		goTOPageField.setText("" + currPage);
 		pageSizeField.setText("" + pagePOJO.getPageSize());
 
-		Vector<Vector<Object>> data = new Vector<>();
+		Vector<Vector<Object>> data = new Vector<Vector<Object>>();
 		String executeModeStr = null;
 		String taskStatusStr = null;
 		List<TaskQuery> taskQueries = pagePOJO.getBeanList();
 
 		for (TaskQuery tQuery : taskQueries) {
-			Vector<Object> rowVector = new Vector<>();
+			Vector<Object> rowVector = new Vector<Object>();
 			rowVector.addElement(tQuery.getTaskId());
 			rowVector.addElement(tQuery.getTaskName());
 			switch (tQuery.getExecuteMode()) {
