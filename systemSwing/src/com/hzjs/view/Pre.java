@@ -443,7 +443,7 @@ public class Pre extends JFrame {
 
 	// 跳转到模拟测试页面
 	private void goToTaskSimulation(ActionEvent e) {
-		this.dispose();
+//		this.dispose();
 		TaskSimulationTest.main(null);
 	}
 }
