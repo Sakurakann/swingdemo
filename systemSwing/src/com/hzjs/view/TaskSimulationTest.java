@@ -492,7 +492,13 @@ public class TaskSimulationTest {
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				List<TaskInfo> results = taskInfoDao.getTemplate();
+				List<TaskInfo> results = null;
+				try {
+					results = taskInfoDao.getTemplate();
+				} catch (Exception e2) {
+					JOptionPane.showMessageDialog(contentPane, e2.getMessage());
+					return;
+				}
 
 				if (results.size() <= 0) {
 					JOptionPane.showMessageDialog(contentPane, "模板为空,仍然导出?");

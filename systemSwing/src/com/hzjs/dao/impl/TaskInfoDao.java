@@ -150,10 +150,14 @@ public class TaskInfoDao {
 		return mapper.findTaskIdBySId(sid);
 	}
 
-	public List<TaskInfo> getTemplate() {
+	public List<TaskInfo> getTemplate() throws Exception {
+		
 		List<Integer> codes = mapper.getTemplateTestCode();
-//		return mapper.getTemplate();
-		return mapper.getTemplateOrderBy(codes);
+		if (codes.size() <= 0) {
+			throw new Exception("当天没有符合条件的任务");
+		} else {
+			return mapper.getTemplateOrderBy(codes);
+		}
 	}
 
 	public static void main(String[] args) {

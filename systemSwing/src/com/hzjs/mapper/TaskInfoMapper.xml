@@ -340,7 +340,7 @@
 		where 
 			z.taskid=t.taskid and
 			t.executemode=3 and t.taskstatus=1 and t.sendstatus=1 and
-			starttime>trunc(sysdate) 
+			z.starttime>trunc(sysdate) 
 		group by t.testcode
 	</select>
 	<select id="getTemplateOrderBy" parameterType="list" resultMap="taskInfoMap">
