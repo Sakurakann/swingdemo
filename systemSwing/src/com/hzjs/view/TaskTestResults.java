@@ -19,6 +19,9 @@ import javax.swing.JFileChooser;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -38,6 +41,7 @@ import com.hzjs.dao.impl.TestTypeDao;
 import com.hzjs.domain.TaskQuery;
 import com.hzjs.domain.TestCode;
 import com.hzjs.domain.TestType;
+import com.hzjs.domain.Trans;
 
 public class TaskTestResults extends JFrame {
 	private static final long serialVersionUID = 1L;
@@ -98,6 +102,7 @@ public class TaskTestResults extends JFrame {
 
 	public TaskTestResults(int taskSID) {
 		this.taskSIdNum = taskSID;
+		setResizable(false);
 		initialize();
 	}
 
@@ -111,9 +116,13 @@ public class TaskTestResults extends JFrame {
 
 		setTitle("系统检测");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 870, 435);
+		setBounds(100, 100, 870, 458);
 		contentPane = new JPanel();
 		setContentPane(contentPane);
+		
+		JMenuBar menuBar = new JMenuBar();
+		setJMenuBar(menuBar);
+		loadMenu(menuBar);
 
 		// setLocationRelativeTo(null);//设置窗体居中
 		// 第二种方法
@@ -193,7 +202,7 @@ public class TaskTestResults extends JFrame {
 		contentPane.add(label_3);
 
 		taskSIdField = new JTextField();
-		taskSIdField.setText("" + taskSIdNum);
+		taskSIdField.setText(Trans.getInstance().getSID());
 		taskSIdField.setEditable(true);
 		taskSIdField.setBounds(766, 39, 86, 23);
 		contentPane.add(taskSIdField);
@@ -427,7 +436,6 @@ public class TaskTestResults extends JFrame {
 		try {
 			taskSIDVal = Integer.parseInt(taskSIdField.getText());
 		} catch (Exception e2) {
-			e2.printStackTrace();
 			JOptionPane.showMessageDialog(null, "任务组ID应为有效数字");
 			return;
 		}
@@ -517,5 +525,71 @@ public class TaskTestResults extends JFrame {
 		} else {
 			goToBtn.setEnabled(true);
 		}
+	}
+	
+	/**
+	 * 加载菜单栏
+	 * @param menuBar
+	 */
+	private void loadMenu(JMenuBar menuBar){
+		JMenu menu = new JMenu("转到其他");
+		menuBar.add(menu);
+		
+		JMenuItem mnConfigDB = new JMenuItem("数据库配置");
+		menu.add(mnConfigDB);
+		mnConfigDB.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				mnConfigDB(e);
+			}
+		});
+		
+		JMenuItem mnImportTask = new JMenuItem("任务导入");
+		menu.add(mnImportTask);
+		mnImportTask.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				mnImportTask(e);
+			}
+		});
+		
+		JMenuItem mnQueryTask = new JMenuItem("任务查询");
+		menu.add(mnQueryTask);
+		mnQueryTask.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				mnQueryTask(e);
+			}
+		});
+		
+		JMenuItem mnTestResult = new JMenuItem("测试结果查询");
+		menu.add(mnTestResult);
+		mnTestResult.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				mnTestResult(e);
+			}
+		});
+	}
+	
+	private void mnImportTask(ActionEvent event){
+		ImportTask.main(null);
+		this.dispose();
+	}
+	private void mnConfigDB(ActionEvent event){
+		ConfigDB.main(null);
+		this.dispose();
+	}
+	private void mnQueryTask(ActionEvent event){
+		QueryTask.main(null);
+		this.dispose();
+	}
+	private void mnTestResult(ActionEvent event){
+		TaskTestResults.main(null);
+		this.dispose();
 	}
 }
