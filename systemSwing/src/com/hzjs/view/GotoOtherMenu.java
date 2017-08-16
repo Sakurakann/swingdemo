@@ -15,6 +15,8 @@ import javax.swing.JMenuItem;
  */
 public class GotoOtherMenu extends JFrame{
 
+	private static final long serialVersionUID = 1L;
+
 	private GotoOtherMenu(){}
 	
 	private static GotoOtherMenu gotoOtherMenu = new GotoOtherMenu();

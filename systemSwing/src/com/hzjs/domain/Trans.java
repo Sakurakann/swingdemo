@@ -1,6 +1,5 @@
 package com.hzjs.domain;
 
-import sun.security.jca.GetInstance;
 
 /**
  * 用以传递Sid 单例类
